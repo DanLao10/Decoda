@@ -1,0 +1,7 @@
+streamlit
+streamlit-option-menu
+openai
+PyPDF2
+reportlab
+firebase-admin
+requests
