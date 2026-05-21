@@ -22,7 +22,7 @@ Decoda is an accessibility-first reading tool for dyslexic and neurodivergent re
 
 ## How to use it
 
-1. Visit https://decoda.streamlit.app/
+1. Visit https://decoda.streamlit.app/ (use light mode)
 2. Create an account (email + password).
 3. Open the **Decoder** tab and upload a text-based PDF.
 4. Click **Translate** to simplify.
