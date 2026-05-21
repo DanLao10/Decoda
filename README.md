@@ -1,85 +1,62 @@
 # Decoda
 
-**Decoda** is an accessibility-first Streamlit app that helps dyslexic and neurodivergent readers tackle dense documents. Upload a PDF, and Decoda rewrites it in clear, dyslexia-friendly language, lets you listen to it, and exports a readable PDF in fonts like Lexend or OpenDyslexic.
+> Make dense reading easier. Upload a PDF, get a clear, dyslexia-friendly version you can read, hear, and download.
 
-## Features
+**Live app:** https://decoda.streamlit.app/
 
-- **PDF decoder** — Extracts text from PDFs and rewrites it with short sentences, plain vocabulary, clear headings, and bullet points (preserving meaning).
-- **Dyslexia-friendly export** — Downloads the rewritten content as a PDF with Lexend / OpenDyslexic typefaces, increased line and letter spacing, and generous margins.
-- **Text-to-speech** — Listen to the rewritten content directly in the browser.
-- **Reading preferences** — Per-account theme settings (font, size, spacing, color) saved to Firestore and applied across the app.
-- **Built-in chatbot** — A sidebar assistant that explains how Decoda works and helps troubleshoot.
-- **Accounts** — Email/password sign-up and login via Firebase Authentication.
+Decoda is an accessibility-first reading tool for dyslexic and neurodivergent readers. It rewrites complex text into shorter sentences and simpler vocabulary, then presents it in a typography setup designed for easier reading — with text-to-speech and a downloadable, dyslexia-friendly PDF.
 
-## Tech stack
+## What it does
 
-- **Frontend / app framework:** Streamlit
-- **Auth:** Firebase Authentication (Admin SDK + REST `signInWithPassword`)
-- **Database:** Cloud Firestore (user preferences)
-- **AI:** OpenAI API (text simplification + chatbot)
-- **PDF:** PyPDF2 (extraction), ReportLab (export)
-- **TTS:** Browser `SpeechSynthesis` (with `pyttsx3` fallback for WAV export)
+- **Decode any PDF.** Upload a text-based PDF and Decoda rewrites it preserving meaning while using short sentences, plain vocabulary, clear headings, and bullets.
+- **Read it your way.** Choose Lexend or OpenDyslexic, adjust size, spacing, and color to fit how *you* read best. Preferences save to your account.
+- **Listen to it.** Built-in text-to-speech reads the simplified version aloud.
+- **Take it with you.** Download the rewritten content as a dyslexia-friendly PDF (Lexend / OpenDyslexic, generous spacing, clean margins).
+- **Ask the assistant.** A built-in chatbot explains how Decoda works and helps troubleshoot.
 
-## Project layout
+## Who it's for
 
-```
-main.py         # Entry point + sidebar nav
-home.py         # Landing page
-account.py      # Login / signup (Firebase)
-translator.py   # PDF upload, AI simplification, dyslexia-friendly PDF export
-chatbot.py      # Sidebar Q&A assistant
-tts.py          # Text-to-speech component
-about.py        # About page
-user_data.py    # Firestore prefs + Firebase init helpers
-```
+- Readers with dyslexia
+- Neurodivergent readers
+- Anyone who finds dense, jargon-heavy text exhausting
+
+## How to use it
+
+1. Visit https://decoda.streamlit.app/
+2. Create an account (email + password).
+3. Open the **Decoder** tab and upload a text-based PDF.
+4. Click **Translate** to simplify.
+5. Read on screen, listen with the TTS player, or download the dyslexia-friendly PDF.
+
+> Decoda works best with PDFs that contain **selectable text**. Scanned-image PDFs need OCR first.
+
+## Built with
+
+- [Streamlit](https://streamlit.io) — UI
+- [Firebase](https://firebase.google.com) — Authentication + Firestore for user preferences
+- [OpenAI](https://openai.com) — text simplification + assistant chatbot
+- [PyPDF2](https://pypi.org/project/PyPDF2/) + [ReportLab](https://www.reportlab.com/) — PDF parsing and export
+- [Lexend](https://www.lexend.com/) and [OpenDyslexic](https://opendyslexic.org/) typefaces
+
+## Limitations
+
+- Only works on PDFs with extractable text (not scanned images).
+- Complex tables, multi-column layouts, and mathematical formulas may simplify imperfectly.
+- Uploaded files are processed only for the current session — nothing is stored server-side.
 
 ## Running locally
 
-1. **Clone and install:**
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   ```
+```bash
+git clone https://github.com/<your-username>/Decoda.git
+cd Decoda
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run main.py
+```
 
-2. **Add secrets** in `.streamlit/secrets.toml` (gitignored):
-   ```toml
-   API_KEY = "sk-..."                                 # OpenAI
-   FIREBASE_API_KEY = "AIza..."                       # Firebase Web API key
-                                                      # (Project Settings → General → Your apps)
-   [firebase]
-   # Paste contents of your Firebase service-account JSON here.
-   # Use triple quotes for the multi-line private_key.
-   type = "service_account"
-   project_id = "your-project"
-   private_key_id = "..."
-   private_key = """-----BEGIN PRIVATE KEY-----
-   ...
-   -----END PRIVATE KEY-----
-   """
-   client_email = "..."
-   client_id = "..."
-   auth_uri = "https://accounts.google.com/o/oauth2/auth"
-   token_uri = "https://oauth2.googleapis.com/token"
-   auth_provider_x509_cert_url = "https://www.googleapis.com/oauth2/v1/certs"
-   client_x509_cert_url = "..."
-   universe_domain = "googleapis.com"
-   ```
+You'll need your own `.streamlit/secrets.toml` with an OpenAI API key, a Firebase Web API key, and a Firebase service-account JSON (under a `[firebase]` table). Make sure both Firebase credentials belong to the same project, and enable Email/Password sign-in in the Firebase console.
 
-3. **Enable Email/Password sign-in** in the Firebase Console
-   (Authentication → Sign-in method → Email/Password → Enable).
+## License
 
-4. **Run:**
-   ```bash
-   streamlit run main.py
-   ```
-
-## Deploying to Streamlit Cloud
-
-Push to GitHub, connect the repo on [share.streamlit.io](https://share.streamlit.io), and paste the same `secrets.toml` contents into the app's **Settings → Secrets** editor. Make sure the `FIREBASE_API_KEY` and the `[firebase]` service account belong to the **same** Firebase project — otherwise sign-up will land users in one project and login will look in another.
-
-## Notes & limitations
-
-- Decoda only works on PDFs with **extractable text**. Scanned image PDFs need OCR first.
-- Math formulas, complex tables, and multi-column layouts may simplify imperfectly.
-- Uploaded documents are processed only for the current session; nothing is persisted server-side.
+MIT
